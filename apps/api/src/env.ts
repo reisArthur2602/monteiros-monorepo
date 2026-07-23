@@ -7,6 +7,12 @@ const envSchema = z.object({
     CORS_ORIGIN: z.string().default('*'),
     JWT_SECRET: z.string().default('dev-secret-change-in-production'),
     JWT_EXPIRES_IN: z.string().default('24h'),
+    SMTP_HOST: z.string().default('localhost'),
+    SMTP_PORT: z.coerce.number().int().positive().default(587),
+    SMTP_SECURE: z.coerce.boolean().default(false),
+    SMTP_USER: z.string().optional(),
+    SMTP_PASSWORD: z.string().optional(),
+    SMTP_FROM: z.string().default('Monteiro Sociedade de Advogados <no-reply@monteiro.adv.br>'),
 });
 
 type Env = z.infer<typeof envSchema>;

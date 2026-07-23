@@ -5,6 +5,11 @@ import { deleteClient } from '@/http/routes/client/delete-client';
 import { getClient } from '@/http/routes/client/get-client';
 import { listClients } from '@/http/routes/client/list-clients';
 import { updateClient } from '@/http/routes/client/update-client';
+import { createIntakeForm } from '@/http/routes/intake-form/create-intake-form';
+import { deleteIntakeForm } from '@/http/routes/intake-form/delete-intake-form';
+import { getIntakeForm } from '@/http/routes/intake-form/get-intake-form';
+import { listIntakeForms } from '@/http/routes/intake-form/list-intake-forms';
+import { updateIntakeForm } from '@/http/routes/intake-form/update-intake-form';
 import { loggerOptions } from '@/lib/logger';
 import { registerAuthorize } from '@/plugins/authorize';
 import { registerCors } from '@/plugins/cors';
@@ -42,6 +47,12 @@ export const buildApp = async () => {
     await app.register(getClient);
     await app.register(updateClient);
     await app.register(deleteClient);
+
+    await app.register(createIntakeForm);
+    await app.register(listIntakeForms);
+    await app.register(getIntakeForm);
+    await app.register(updateIntakeForm);
+    await app.register(deleteIntakeForm);
 
     return app;
 };

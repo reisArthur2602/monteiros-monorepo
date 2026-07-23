@@ -1,5 +1,5 @@
 {
-  "name": "monteiros",
+  "name": "@monteiro",
   "private": true,
   "scripts": {
     "build": "turbo run build",

@@ -1,10 +1,13 @@
 {
-  "name": "@monteiro/tsconfig",
-  "version": "1.0.0",
-  "private": true,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-   "files": ["node.json", "react.json"]
+    "name": "@monteiro/config",
+    "version": "1.0.0",
+    "private": true,
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "exports": {
+        "./tsconfig/node.json": "./node.json",
+        "./tsconfig/react.json": "./react.json"
+    }
 }

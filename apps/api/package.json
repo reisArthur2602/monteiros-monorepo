@@ -1,4 +1,26 @@
 {
-  "name": "@monteiro/api",
-  "version": "1.0.0"
+    "name": "@monteiro/api",
+    "version": "1.0.0",
+    "scripts": {
+        "dev": "tsx watch src/http/server.ts",
+        "build": "tsc && tsc-alias",
+        "start": "node dist/http/server.js",
+        "check-types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@fastify/cors": "^11.3.0",
+        "@fastify/rate-limit": "^11.1.0",
+        "@fastify/swagger": "^9.8.1",
+        "@scalar/fastify-api-reference": "^1.63.0",
+        "fastify": "^5.10.0",
+        "fastify-plugin": "^6.0.0",
+        "fastify-type-provider-zod": "^7.0.0",
+        "zod": "^4.4.3"
+    },
+    "devDependencies": {
+        "@monteiro/config": "workspace:*",
+        "@types/node": "^26.1.1",
+        "tsc-alias": "^1.9.1",
+        "tsx": "^4.23.1"
+    }
 }

@@ -1,0 +1,464 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+/**
+ * USERS
+ * Internal system users: lawyers, attendants, admins, interns.
+ */
+model User {
+    id           String   @id @default(uuid()) @db.Uuid
+    name         String   @db.VarChar(150)
+    email        String   @unique @db.VarChar(150)
+    passwordHash String
+    role         UserRole
+    isActive     Boolean  @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdClients     Client[]      @relation("ClientCreatedBy")
+    createdIntakeForms IntakeForm[]  @relation("IntakeFormCreatedBy")
+    createdLegalCases  LegalCase[]   @relation("LegalCaseCreatedBy")
+    uploadedDocuments  Document[]    @relation("DocumentUploadedBy")
+    sentEmails         SentEmail[]   @relation("EmailSentBy")
+    activityLogs       ActivityLog[] @relation("ActivityLogUser")
+
+    assignedIntakeFormsAsLawyer    IntakeForm[] @relation("IntakeFormLawyer")
+    assignedIntakeFormsAsAttendant IntakeForm[] @relation("IntakeFormAttendant")
+    assignedLegalCases             LegalCase[]  @relation("LegalCaseLawyer")
+    caseUpdates                    CaseUpdate[]
+
+    @@index([email])
+    @@index([role])
+    @@map("users")
+}
+
+enum UserRole {
+    ADMIN
+    LAWYER
+    ATTENDANT
+    INTERN
+}
+
+/**
+ * CLIENTS
+ * Main business entity.
+ * Almost everything in the system belongs to a client.
+ */
+model Client {
+    id         String     @id @default(uuid()) @db.Uuid
+    personType PersonType @default(INDIVIDUAL)
+
+    name        String  @db.VarChar(200)
+    document    String? @db.VarChar(20) // CPF or CNPJ
+    secondaryId String? @db.VarChar(30) // RG or state registration
+
+    birthDate     DateTime?
+    maritalStatus String?   @db.VarChar(50)
+    occupation    String?   @db.VarChar(100)
+
+    phone    String? @db.VarChar(30)
+    whatsapp String? @db.VarChar(30)
+    email    String? @db.VarChar(150)
+
+    zipCode      String? @db.VarChar(20)
+    street       String?
+    number       String? @db.VarChar(20)
+    complement   String? @db.VarChar(100)
+    neighborhood String? @db.VarChar(100)
+    city         String? @db.VarChar(100)
+    state        String? @db.VarChar(2)
+
+    notes  String?
+    status ClientStatus @default(ACTIVE)
+
+    createdById String? @db.Uuid
+    createdBy   User?   @relation("ClientCreatedBy", fields: [createdById], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    intakeForms  IntakeForm[]
+    legalCases   LegalCase[]
+    documents    Document[]
+    sentEmails   SentEmail[]
+    activityLogs ActivityLog[]
+
+    @@index([name])
+    @@index([document])
+    @@index([email])
+    @@index([phone])
+    @@index([whatsapp])
+    @@index([status])
+    @@map("clients")
+}
+
+enum PersonType {
+    INDIVIDUAL
+    COMPANY
+}
+
+enum ClientStatus {
+    ACTIVE
+    INACTIVE
+    PROSPECT
+    ARCHIVED
+}
+
+/**
+ * INTAKE FORMS
+ * Initial legal triage form.
+ * A legal case should be created from an intake form.
+ */
+model IntakeForm {
+    id       String @id @default(uuid()) @db.Uuid
+    clientId String @db.Uuid
+    client   Client @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+    lawyerId String? @db.Uuid
+    lawyer   User?   @relation("IntakeFormLawyer", fields: [lawyerId], references: [id])
+
+    attendantId String? @db.Uuid
+    attendant   User?   @relation("IntakeFormAttendant", fields: [attendantId], references: [id])
+
+    serviceDate DateTime @default(now())
+
+    clientStatement     String
+    preliminaryAnalysis String?
+
+    legalArea String?          @db.VarChar(100)
+    urgency   UrgencyLevel?
+    viability ViabilityStatus?
+
+    status IntakeFormStatus @default(DRAFT)
+
+    recommendation       String?
+    pendingDocumentsNote String?
+
+    pdfUrl      String?
+    emailSent   Boolean   @default(false)
+    finalizedAt DateTime?
+
+    createdById String? @db.Uuid
+    createdBy   User?   @relation("IntakeFormCreatedBy", fields: [createdById], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    legalCases   LegalCase[]
+    documents    Document[]
+    sentEmails   SentEmail[]
+    activityLogs ActivityLog[]
+
+    @@index([clientId])
+    @@index([lawyerId])
+    @@index([attendantId])
+    @@index([status])
+    @@index([serviceDate])
+    @@map("intake_forms")
+}
+
+enum IntakeFormStatus {
+    DRAFT
+    UNDER_REVIEW
+    PENDING_DOCUMENTS
+    APPROVED_FOR_CASE
+    REJECTED
+    CONVERTED_TO_CASE
+}
+
+enum UrgencyLevel {
+    LOW
+    MEDIUM
+    HIGH
+    CRITICAL
+}
+
+enum ViabilityStatus {
+    NOT_REVIEWED
+    VIABLE
+    NOT_VIABLE
+    NEEDS_DOCUMENTS
+    NEEDS_RESEARCH
+}
+
+/**
+ * LEGAL CASES
+ * Represents judicial, extrajudicial, administrative or pre-litigation matters.
+ */
+model LegalCase {
+    id String @id @default(uuid()) @db.Uuid
+
+    clientId String @db.Uuid
+    client   Client @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+    intakeFormId String     @db.Uuid
+    intakeForm   IntakeForm @relation(fields: [intakeFormId], references: [id], onDelete: Restrict)
+
+    lawyerId String? @db.Uuid
+    lawyer   User?   @relation("LegalCaseLawyer", fields: [lawyerId], references: [id])
+
+    caseNumber String? @db.VarChar(50)
+
+    caseType LegalCaseType   @default(PRE_LITIGATION)
+    status   LegalCaseStatus @default(PRE_LITIGATION)
+
+    legalArea     String? @db.VarChar(100)
+    actionType    String? @db.VarChar(150)
+    opposingParty String? @db.VarChar(200)
+
+    jurisdiction String? @db.VarChar(150) // comarca
+    court        String? @db.VarChar(150) // vara
+    tribunal     String? @db.VarChar(150) // TJSP, TRT, TRF etc.
+
+    description String?
+    notes       String?
+
+    filingDate DateTime?
+    closedAt   DateTime?
+
+    createdById String? @db.Uuid
+    createdBy   User?   @relation("LegalCaseCreatedBy", fields: [createdById], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    documents    Document[]
+    caseUpdates  CaseUpdate[]
+    sentEmails   SentEmail[]
+    activityLogs ActivityLog[]
+
+    @@index([clientId])
+    @@index([intakeFormId])
+    @@index([lawyerId])
+    @@index([caseNumber])
+    @@index([status])
+    @@index([opposingParty])
+    @@map("legal_cases")
+}
+
+enum LegalCaseType {
+    PRE_LITIGATION
+    JUDICIAL
+    EXTRAJUDICIAL
+    ADMINISTRATIVE
+    ADVISORY
+}
+
+enum LegalCaseStatus {
+    PRE_LITIGATION
+    DRAFTING
+    FILED
+    IN_PROGRESS
+    SUSPENDED
+    SETTLED
+    CLOSED
+    ARCHIVED
+}
+
+/**
+ * DOCUMENTS
+ * Files linked to a client and optionally to an intake form or legal case.
+ */
+model Document {
+    id String @id @default(uuid()) @db.Uuid
+
+    clientId String @db.Uuid
+    client   Client @relation(fields: [clientId], references: [id], onDelete: Restrict)
+
+    intakeFormId String?     @db.Uuid
+    intakeForm   IntakeForm? @relation(fields: [intakeFormId], references: [id], onDelete: SetNull)
+
+    legalCaseId String?    @db.Uuid
+    legalCase   LegalCase? @relation(fields: [legalCaseId], references: [id], onDelete: SetNull)
+
+    uploadedById String? @db.Uuid
+    uploadedBy   User?   @relation("DocumentUploadedBy", fields: [uploadedById], references: [id])
+
+    originalName String @db.VarChar(255)
+    storedName   String @db.VarChar(255)
+
+    documentType DocumentType?
+    mimeType     String?       @db.VarChar(100)
+    sizeBytes    BigInt?
+
+    storageUrl  String
+    description String?
+
+    source DocumentSource @default(UPLOAD)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    activityLogs ActivityLog[]
+
+    @@index([clientId])
+    @@index([intakeFormId])
+    @@index([legalCaseId])
+    @@index([documentType])
+    @@index([source])
+    @@map("documents")
+}
+
+enum DocumentType {
+    PERSONAL_ID
+    ADDRESS_PROOF
+    CONTRACT
+    POWER_OF_ATTORNEY
+    PETITION
+    COURT_DECISION
+    JUDGMENT
+    INTAKE_FORM_PDF
+    OTHER
+}
+
+enum DocumentSource {
+    UPLOAD
+    GENERATED_PDF
+    EMAIL
+    SYSTEM
+}
+
+/**
+ * CASE UPDATES
+ * Internal updates or procedural history of a legal case.
+ */
+model CaseUpdate {
+    id String @id @default(uuid()) @db.Uuid
+
+    legalCaseId String    @db.Uuid
+    legalCase   LegalCase @relation(fields: [legalCaseId], references: [id], onDelete: Cascade)
+
+    userId String? @db.Uuid
+    user   User?   @relation(fields: [userId], references: [id])
+
+    updateDate DateTime @default(now())
+
+    title       String          @db.VarChar(200)
+    description String?
+    type        CaseUpdateType?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([legalCaseId])
+    @@index([userId])
+    @@index([updateDate])
+    @@index([type])
+    @@map("case_updates")
+}
+
+enum CaseUpdateType {
+    NOTE
+    PETITION
+    COURT_DECISION
+    ORDER
+    HEARING
+    DEADLINE
+    JUDGMENT
+    SETTLEMENT
+    OTHER
+}
+
+/**
+ * SENT EMAILS
+ * Tracks emails sent by the system, especially intake form PDFs.
+ */
+model SentEmail {
+    id String @id @default(uuid()) @db.Uuid
+
+    clientId String? @db.Uuid
+    client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+    intakeFormId String?     @db.Uuid
+    intakeForm   IntakeForm? @relation(fields: [intakeFormId], references: [id], onDelete: SetNull)
+
+    legalCaseId String?    @db.Uuid
+    legalCase   LegalCase? @relation(fields: [legalCaseId], references: [id], onDelete: SetNull)
+
+    sentById String? @db.Uuid
+    sentBy   User?   @relation("EmailSentBy", fields: [sentById], references: [id])
+
+    recipient String  @db.VarChar(150)
+    subject   String  @db.VarChar(255)
+    body      String?
+
+    status EmailStatus @default(SENT)
+    error  String?
+
+    sentAt    DateTime @default(now())
+    createdAt DateTime @default(now())
+
+    @@index([clientId])
+    @@index([intakeFormId])
+    @@index([legalCaseId])
+    @@index([sentById])
+    @@index([status])
+    @@index([sentAt])
+    @@map("sent_emails")
+}
+
+enum EmailStatus {
+    PENDING
+    SENT
+    FAILED
+}
+
+/**
+ * ACTIVITY LOGS
+ * Audit trail for important actions.
+ */
+model ActivityLog {
+    id String @id @default(uuid()) @db.Uuid
+
+    userId String? @db.Uuid
+    user   User?   @relation("ActivityLogUser", fields: [userId], references: [id], onDelete: SetNull)
+
+    clientId String? @db.Uuid
+    client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+    intakeFormId String?     @db.Uuid
+    intakeForm   IntakeForm? @relation(fields: [intakeFormId], references: [id], onDelete: SetNull)
+
+    legalCaseId String?    @db.Uuid
+    legalCase   LegalCase? @relation(fields: [legalCaseId], references: [id], onDelete: SetNull)
+
+    documentId String?   @db.Uuid
+    document   Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+    action      ActivityAction
+    description String?
+    metadata    Json?
+
+    createdAt DateTime @default(now())
+
+    @@index([userId])
+    @@index([clientId])
+    @@index([intakeFormId])
+    @@index([legalCaseId])
+    @@index([documentId])
+    @@index([action])
+    @@index([createdAt])
+    @@map("activity_logs")
+}
+
+enum ActivityAction {
+    CLIENT_CREATED
+    CLIENT_UPDATED
+    INTAKE_FORM_CREATED
+    INTAKE_FORM_UPDATED
+    INTAKE_FORM_FINALIZED
+    INTAKE_FORM_EMAIL_SENT
+    INTAKE_FORM_PDF_GENERATED
+    LEGAL_CASE_CREATED
+    LEGAL_CASE_UPDATED
+    DOCUMENT_UPLOADED
+    DOCUMENT_REMOVED
+    EMAIL_SENT
+}

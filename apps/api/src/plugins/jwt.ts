@@ -1,5 +1,6 @@
 import { env } from '@/env.js';
 import jwt from '@fastify/jwt';
+import { UserRole } from '@monteiro/db';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 import { z } from 'zod';
@@ -7,7 +8,7 @@ import { z } from 'zod';
 export const jwtPayloadSchema = z.object({
     userId: z.string().uuid(),
     email: z.string().email(),
-    role: z.enum(['ADMIN', 'LAWYER', 'ATTENDANT', 'INTERN']),
+    role: z.nativeEnum(UserRole),
 });
 
 export type JwtPayload = z.infer<typeof jwtPayloadSchema>;
@@ -57,7 +58,7 @@ export const registerJwt = fp(async (app: FastifyInstance) => {
     });
 
     app.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
-        const publicRoutes = ['/health', '/docs'];
+        const publicRoutes = ['/health', '/docs', '/auth/login'];
 
         if (publicRoutes.some((route) => request.url.startsWith(route))) {
             return;

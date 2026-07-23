@@ -1,5 +1,10 @@
 import { authenticateUser } from '@/http/routes/auth/authenticate-user';
 import { getProfile } from '@/http/routes/auth/get-profile';
+import { createClient } from '@/http/routes/client/create-client';
+import { deleteClient } from '@/http/routes/client/delete-client';
+import { getClient } from '@/http/routes/client/get-client';
+import { listClients } from '@/http/routes/client/list-clients';
+import { updateClient } from '@/http/routes/client/update-client';
 import { loggerOptions } from '@/lib/logger';
 import { registerAuthorize } from '@/plugins/authorize';
 import { registerCors } from '@/plugins/cors';
@@ -31,6 +36,12 @@ export const buildApp = async () => {
 
     await app.register(authenticateUser);
     await app.register(getProfile);
+
+    await app.register(createClient);
+    await app.register(listClients);
+    await app.register(getClient);
+    await app.register(updateClient);
+    await app.register(deleteClient);
 
     return app;
 };

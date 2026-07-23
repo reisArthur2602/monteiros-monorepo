@@ -1,7 +1,7 @@
 import { loggerOptions } from '@/lib/logger';
 import { registerCors } from '@/plugins/cors';
 import { registerErrorHandler } from '@/plugins/error-handler';
-
+import { registerJwt } from '@/plugins/jwt';
 import { registerDocs } from '@/plugins/docs';
 import { registerRateLimit } from '@/plugins/rate-limit';
 import Fastify from 'fastify';
@@ -20,6 +20,7 @@ export const buildApp = async () => {
     await registerErrorHandler(app);
     await registerCors(app);
     await registerRateLimit(app);
+    await registerJwt(app);
     await registerDocs(app);
 
     app.get('/health', async () => ({ ok: true }));

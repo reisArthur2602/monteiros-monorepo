@@ -5,6 +5,8 @@ const envSchema = z.object({
     PORT: z.coerce.number().int().positive().default(3000),
     LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
     CORS_ORIGIN: z.string().default('*'),
+    JWT_SECRET: z.string().default('dev-secret-change-in-production'),
+    JWT_EXPIRES_IN: z.string().default('24h'),
 });
 
 type Env = z.infer<typeof envSchema>;

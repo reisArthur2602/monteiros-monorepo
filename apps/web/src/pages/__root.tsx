@@ -25,7 +25,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             },
             {
                 name: 'theme-color',
-                content: '#000000',
+                content: '#233b32',
             },
         ],
         links: [
@@ -40,7 +40,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
             },
             {
                 rel: 'stylesheet',
-                href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap',
+                href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Spline+Sans:wght@400;500;600;700&display=swap',
             },
             {
                 rel: 'stylesheet',

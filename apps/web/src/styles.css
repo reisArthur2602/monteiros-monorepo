@@ -1,13 +1,338 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import '@fontsource-variable/inter';
 
 @custom-variant dark (&:is(.dark *));
 
+/* =========================================================
+   MONTEIRO — DESIGN SYSTEM (Legalis "Registro" 2.1)
+   Fonte de verdade: apps/web/reference/design-system/
+   ========================================================= */
+
+:root {
+    /* ---------------------------------------------------
+       1. PALETA PRIMITIVA — Registro
+       Não usar diretamente em componentes; usar os tokens
+       semânticos abaixo (bg-*, text-*, border-*, status-*).
+       Primitivos não variam entre temas claro/escuro.
+       --------------------------------------------------- */
+
+    /* Ink / tinta */
+    --color-ink-950: #101713;
+    --color-ink-900: #18221f;
+    --color-ink-800: #21302a;
+    --color-ink-700: #2b4037;
+    --color-ink-600: #385247;
+    --color-ink-500: #4c675c;
+    --color-ink-400: #71867d;
+    --color-ink-300: #9eaea7;
+    --color-ink-200: #cad3cf;
+    --color-ink-100: #e4eae7;
+    --color-ink-50: #f3f6f4;
+
+    /* Registry / registro */
+    --color-registry-700: #304e61;
+    --color-registry-600: #3e6177;
+    --color-registry-500: #527a91;
+    --color-registry-400: #7396a8;
+    --color-registry-100: #dce7ec;
+    --color-registry-50: #f1f6f8;
+
+    /* Seal / selo */
+    --color-seal-700: #7d342c;
+    --color-seal-600: #934135;
+    --color-seal-500: #a9503e;
+    --color-seal-400: #c2715e;
+    --color-seal-100: #f1d9d3;
+    --color-seal-50: #fbf2f0;
+
+    /* Brass / latão — uso restrito */
+    --color-brass-700: #73551f;
+    --color-brass-600: #8c692b;
+    --color-brass-500: #a7813b;
+    --color-brass-400: #c19f60;
+    --color-brass-100: #efe4cc;
+    --color-brass-50: #faf6ed;
+
+    /* Sage / sucesso */
+    --color-sage-700: #2f664b;
+    --color-sage-600: #3d795a;
+    --color-sage-500: #4e8d6b;
+    --color-sage-100: #dcece3;
+    --color-sage-50: #f0f7f3;
+
+    /* Amber / alerta */
+    --color-amber-700: #875919;
+    --color-amber-600: #a16a20;
+    --color-amber-500: #bd7e2b;
+    --color-amber-100: #f4e3c7;
+    --color-amber-50: #fcf6ea;
+
+    /* Crimson / perigo */
+    --color-crimson-700: #7d303a;
+    --color-crimson-600: #963b46;
+    --color-crimson-500: #ad4a55;
+    --color-crimson-100: #f2dadd;
+    --color-crimson-50: #fcf2f3;
+
+    /* Plum / conteúdo especial */
+    --color-plum-700: #5e4968;
+    --color-plum-600: #72577d;
+    --color-plum-500: #896b94;
+    --color-plum-100: #e9e0ec;
+    --color-plum-50: #f7f3f8;
+
+    /* Stone / neutros */
+    --color-stone-950: #141916;
+    --color-stone-900: #1c231f;
+    --color-stone-800: #2b332f;
+    --color-stone-700: #3d4641;
+    --color-stone-600: #545e58;
+    --color-stone-500: #6d7771;
+    --color-stone-400: #919a95;
+    --color-stone-300: #bec5c1;
+    --color-stone-200: #dde2df;
+    --color-stone-100: #ebeeec;
+    --color-stone-50: #f6f8f7;
+
+    /* ---------------------------------------------------
+       2. SUPERFÍCIES SEMÂNTICAS (tema claro)
+       --------------------------------------------------- */
+    --bg-canvas: #f1f4f1;
+    --bg-surface: #fbfcfa;
+    --bg-surface-subtle: #e9eeea;
+    --bg-surface-elevated: #ffffff;
+    --bg-inverse: var(--color-ink-950);
+    --bg-brand: #233b32;
+    --bg-brand-hover: #2d4a40;
+    --bg-brand-active: #192d26;
+    --bg-accent: var(--color-seal-500);
+
+    /* ---------------------------------------------------
+       3. TEXTO SEMÂNTICO (tema claro)
+       --------------------------------------------------- */
+    --text-primary: var(--color-stone-900);
+    --text-secondary: var(--color-stone-600);
+    --text-tertiary: var(--color-stone-500);
+    --text-disabled: var(--color-stone-400);
+    --text-inverse: #ffffff;
+    --text-brand: var(--color-ink-700);
+    --text-link: var(--color-registry-700);
+    --text-danger: var(--color-crimson-700);
+    --text-success: var(--color-sage-700);
+    --text-warning: var(--color-amber-700);
+
+    /* ---------------------------------------------------
+       4. BORDAS (tema claro)
+       --------------------------------------------------- */
+    --border-subtle: var(--color-stone-200);
+    --border-default: var(--color-stone-300);
+    --border-strong: var(--color-stone-400);
+    --border-focus: var(--color-registry-500);
+    --border-danger: var(--color-crimson-500);
+
+    /* ---------------------------------------------------
+       5. ESTADOS (tema claro)
+       Cada estado expõe background, border e foreground.
+       "special" cobre conteúdo gerado/plum — completado a
+       partir do primitivo plum, seguindo o mesmo padrão dos
+       demais estados (não definido explicitamente no CSS de
+       origem; ver relatório de divergências).
+       --------------------------------------------------- */
+    --status-info-bg: var(--color-registry-50);
+    --status-info-border: var(--color-registry-100);
+    --status-info-text: var(--color-registry-700);
+    --status-success-bg: var(--color-sage-50);
+    --status-success-border: var(--color-sage-100);
+    --status-success-text: var(--color-sage-700);
+    --status-warning-bg: var(--color-amber-50);
+    --status-warning-border: var(--color-amber-100);
+    --status-warning-text: var(--color-amber-700);
+    --status-danger-bg: var(--color-crimson-50);
+    --status-danger-border: var(--color-crimson-100);
+    --status-danger-text: var(--color-crimson-700);
+    --status-neutral-bg: var(--color-stone-100);
+    --status-neutral-border: var(--color-stone-200);
+    --status-neutral-text: var(--color-stone-700);
+    --status-special-bg: var(--color-plum-50);
+    --status-special-border: var(--color-plum-100);
+    --status-special-text: var(--color-plum-700);
+
+    /* ---------------------------------------------------
+       6. NAVEGAÇÃO / SHELL (tema fixo — sempre "tinta")
+       O sidebar permanece escuro nos dois temas do app.
+       --------------------------------------------------- */
+    --sidebar: var(--color-ink-950);
+    --sidebar-foreground: var(--color-ink-100);
+    --sidebar-primary: var(--color-seal-500);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgba(255, 255, 255, 0.055);
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.07);
+    --sidebar-ring: var(--color-registry-400);
+
+    /* ---------------------------------------------------
+       8. CONTROLES E RITMO DE COMPONENTE
+       --------------------------------------------------- */
+    --control-sm: 2.125rem;
+    --control-md: 2.625rem;
+    --control-lg: 3.125rem;
+
+    --field-padding-inline: 0.875rem;
+    --field-gap: 0.5rem;
+    --card-padding-sm: 1rem;
+    --card-padding-md: 1.25rem;
+    --card-padding-lg: 1.5rem;
+    --card-item-gap: 0.875rem;
+    --badge-height: 1.375rem;
+    --switch-width: 2.5rem;
+    --switch-height: 1.375rem;
+    --switch-thumb: 1rem;
+
+    /* ---------------------------------------------------
+       9. LAYOUT
+       --------------------------------------------------- */
+    --sidebar-width: 17rem;
+    --content-max: 90rem;
+
+    /* ---------------------------------------------------
+       10. CAMADAS
+       --------------------------------------------------- */
+    --z-dropdown: 1000;
+    --z-sticky: 1100;
+    --z-drawer: 1200;
+    --z-modal: 1300;
+    --z-toast: 1400;
+    --z-tooltip: 1500;
+
+    /* =====================================================
+       PONTE COM O TEMA SHADCN (base-vega)
+       Reaproveita os nomes estruturais já usados pelos
+       componentes gerados (button, input, card, badge…).
+       ===================================================== */
+    --background: var(--bg-canvas);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface-elevated);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--bg-brand);
+    --primary-foreground: var(--text-inverse);
+    --secondary: var(--color-stone-100);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--bg-surface-subtle);
+    --muted-foreground: var(--text-secondary);
+    /*
+     * shadcn usa "accent" como superfície neutra de hover/seleção em menus,
+     * dropdowns, calendário etc. — um conceito estrutural diferente do
+     * "accent" do Design System (vermelho-selo institucional, de uso
+     * restrito e assinatura visual). Mapear accent estrutural para o
+     * vermelho-selo pintaria todo hover de menu de vermelho, violando a
+     * regra de contenção do próprio Design System. Por isso o accent
+     * estrutural usa um tom neutro (surface-subtle) e o vermelho-selo
+     * fica disponível como --bg-accent / bg-brand-accent para uso pontual
+     * e intencional (marcador de autos, kicker).
+     */
+    --accent: var(--bg-surface-subtle);
+    --accent-foreground: var(--text-primary);
+    --destructive: var(--color-crimson-600);
+    --border: var(--border-default);
+    --input: var(--border-default);
+    --ring: var(--border-focus);
+}
+
+.dark {
+    --bg-canvas: #101613;
+    --bg-surface: #171f1b;
+    --bg-surface-subtle: #202a25;
+    --bg-surface-elevated: #26312b;
+    --bg-inverse: #f5f7f5;
+    --bg-brand: #426b5b;
+    --bg-brand-hover: #4f7c6b;
+    --bg-brand-active: #355b4d;
+    --bg-accent: #c2715e;
+
+    --text-primary: #f1f4f2;
+    --text-secondary: #c1cac5;
+    --text-tertiary: #9da8a2;
+    --text-disabled: #727e78;
+    --text-inverse: #ffffff;
+    --text-brand: #d2e1d9;
+    --text-link: #a9c6d4;
+    --text-danger: #efb7bd;
+    --text-success: #abd5bc;
+    --text-warning: #e6c38c;
+
+    --border-subtle: #2a352f;
+    --border-default: #3a4740;
+    --border-strong: #59675f;
+    --border-focus: #83a6b7;
+    --border-danger: #cf7580;
+
+    --status-info-bg: #1c3039;
+    --status-info-border: #31505f;
+    --status-info-text: #b7d3df;
+    --status-success-bg: #1d3026;
+    --status-success-border: #335441;
+    --status-success-text: #b6dac3;
+    --status-warning-bg: #342a18;
+    --status-warning-border: #5a4728;
+    --status-warning-text: #e8ca98;
+    --status-danger-bg: #382126;
+    --status-danger-border: #633942;
+    --status-danger-text: #efb9bf;
+    --status-neutral-bg: #222b26;
+    --status-neutral-border: #354039;
+    --status-neutral-text: #d2d9d5;
+    /* Sem definição explícita na fonte de origem para o tema escuro;
+       derivado do primitivo plum seguindo o mesmo padrão dos demais
+       status. Ver relatório de divergências. */
+    --status-special-bg: #2a2430;
+    --status-special-border: #453a4d;
+    --status-special-text: #d9cadf;
+
+    color-scheme: dark;
+
+    --background: var(--bg-canvas);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface-elevated);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--bg-brand);
+    --primary-foreground: var(--text-inverse);
+    --secondary: var(--color-stone-800);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--bg-surface-subtle);
+    --muted-foreground: var(--text-secondary);
+    --accent: var(--bg-surface-subtle);
+    --accent-foreground: var(--text-primary);
+    --destructive: var(--color-crimson-500);
+    --border: var(--border-default);
+    --input: var(--border-default);
+    --ring: var(--border-focus);
+}
+
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Inter Variable', sans-serif;
+    /* Cores estruturais do shadcn */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -16,115 +341,209 @@
     --color-sidebar-primary: var(--sidebar-primary);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+
+    /* Tokens semânticos Monteiro expostos como utilitários Tailwind
+       (bg-*, text-*, border-*) */
+    --color-canvas: var(--bg-canvas);
+    --color-surface: var(--bg-surface);
+    --color-surface-subtle: var(--bg-surface-subtle);
+    --color-surface-elevated: var(--bg-surface-elevated);
+    --color-inverse: var(--bg-inverse);
+    --color-brand: var(--bg-brand);
+    --color-brand-hover: var(--bg-brand-hover);
+    --color-brand-active: var(--bg-brand-active);
+    --color-brand-accent: var(--bg-accent);
+
+    --color-primary-text: var(--text-primary);
+    --color-secondary-text: var(--text-secondary);
+    --color-tertiary-text: var(--text-tertiary);
+    --color-disabled-text: var(--text-disabled);
+    --color-inverse-text: var(--text-inverse);
+    --color-brand-text: var(--text-brand);
+    --color-link: var(--text-link);
+    --color-danger-text: var(--text-danger);
+    --color-success-text: var(--text-success);
+    --color-warning-text: var(--text-warning);
+
+    --color-subtle: var(--border-subtle);
+    --color-default: var(--border-default);
+    --color-strong: var(--border-strong);
+    --color-focus: var(--border-focus);
+    --color-danger: var(--border-danger);
+
+    /*
+     * Tríades de estado (badge, alert): status-{estado}-{bg|border|text}.
+     * Nomeadas separadamente dos tokens de texto inline acima
+     * (success-text/warning-text/danger-text) para não colidir — um é a
+     * cor de ênfase de texto solto, o outro é a cor de texto sobre um
+     * fundo de estado (badge/alert).
+     */
+    --color-status-info-bg: var(--status-info-bg);
+    --color-status-info-border: var(--status-info-border);
+    --color-status-info-text: var(--status-info-text);
+    --color-status-success-bg: var(--status-success-bg);
+    --color-status-success-border: var(--status-success-border);
+    --color-status-success-text: var(--status-success-text);
+    --color-status-warning-bg: var(--status-warning-bg);
+    --color-status-warning-border: var(--status-warning-border);
+    --color-status-warning-text: var(--status-warning-text);
+    --color-status-danger-bg: var(--status-danger-bg);
+    --color-status-danger-border: var(--status-danger-border);
+    --color-status-danger-text: var(--status-danger-text);
+    --color-status-neutral-bg: var(--status-neutral-bg);
+    --color-status-neutral-border: var(--status-neutral-border);
+    --color-status-neutral-text: var(--status-neutral-text);
+    --color-status-special-bg: var(--status-special-bg);
+    --color-status-special-border: var(--status-special-border);
+    --color-status-special-text: var(--status-special-text);
+
+    /* Tipografia — famílias */
+    --font-display: 'Newsreader', Georgia, serif;
+    --font-legal: 'Newsreader', Georgia, serif;
+    --font-sans: 'Spline Sans', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+    --font-heading: var(--font-display);
+
+    /* Escala tipográfica do Design System sobrepõe a escala padrão
+       do Tailwind (text-xs … text-5xl) e adiciona 2xs/md. */
+    --text-2xs: 0.6875rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.8125rem;
+    --text-md: 0.9375rem;
+    --text-base: 0.9375rem;
+    --text-lg: 1.0625rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 2.875rem;
+
+    --leading-tight: 1.15;
+    --leading-snug: 1.32;
+    --leading-normal: 1.52;
+    --leading-relaxed: 1.72;
+
+    /* Raios — sobrepõe a escala calc()-derivada do preset padrão */
+    --radius-xs: 0.1875rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.875rem;
+    --radius-full: 9999px;
+
+    /* Sombras — sobrepõe a escala padrão do Tailwind */
+    --shadow-xs: 0 1px 1px rgba(16, 23, 19, 0.04);
+    --shadow-sm: 0 1px 2px rgba(16, 23, 19, 0.06), 0 4px 12px rgba(16, 23, 19, 0.03);
+    --shadow-md: 0 8px 24px rgba(16, 23, 19, 0.08);
+    --shadow-lg: 0 16px 42px rgba(16, 23, 19, 0.12);
+    --shadow-xl: 0 24px 64px rgba(16, 23, 19, 0.16);
+    --shadow-focus: 0 0 0 3px rgba(82, 122, 145, 0.19);
+
+    /* Movimento */
+    --duration-fast: 110ms;
+    --duration-normal: 180ms;
+    --duration-slow: 260ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+/* =========================================================
+   UTILITÁRIOS TIPOGRÁFICOS SEMÂNTICOS
+   ========================================================= */
+@utility font-legal {
+    font-family: var(--font-legal);
 }
 
-.dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+@utility overline {
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+@utility legal-copy {
+    font-family: var(--font-legal);
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    letter-spacing: 0;
+}
+
+@utility kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-seal-600);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    &::before {
+        content: '';
+        width: 1.5rem;
+        height: 1px;
+        background: currentColor;
+    }
+}
+
+@utility docket-id {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+/* =========================================================
+   MARCADOR DE AUTOS
+   Régua vertical curta em vermelho-selo. Uso restrito:
+   título de página, item ativo de navegação, seção
+   principal de documentação. Não usar como decoração em
+   todos os cards.
+   ========================================================= */
+@utility docket-marker {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.15em;
+        bottom: 0.15em;
+        width: 3px;
+        border-radius: var(--radius-full);
+        background: var(--color-seal-400);
+    }
 }
 
 @layer base {
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
+        font-feature-settings:
+            'kern' 1,
+            'liga' 1;
+        letter-spacing: -0.006em;
     }
+
     html {
         @apply font-sans;
+    }
+
+    ::selection {
+        background: var(--color-seal-100);
+        color: var(--color-ink-950);
+    }
+
+    a {
+        color: var(--text-link);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.18em;
     }
 }

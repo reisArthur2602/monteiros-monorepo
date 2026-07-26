@@ -1,4 +1,19 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { config } from 'dotenv';
 import { z } from 'zod';
+
+/*
+ * Resolvido relativo a este arquivo (não ao process.cwd() de quem importa),
+ * pois esse pacote pode ser carregado tanto pela API (cwd apps/api) quanto
+ * pelo Prisma CLI (cwd packages/db) — dotenv sozinho usa cwd e resolveria
+ * para o .env errado dependendo de quem importou primeiro.
+ */
+const envFilePath = resolve(__dirname, '..', '.env');
+
+if (existsSync(envFilePath)) {
+    config({ path: envFilePath });
+}
 
 const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
@@ -13,6 +28,7 @@ const envSchema = z.object({
     SMTP_USER: z.string().optional(),
     SMTP_PASSWORD: z.string().optional(),
     SMTP_FROM: z.string().default('Monteiro Sociedade de Advogados <no-reply@monteiro.adv.br>'),
+    DATABASE_URL: z.string().min(1, 'DATABASE_URL é obrigatório'),
 });
 
 type Env = z.infer<typeof envSchema>;

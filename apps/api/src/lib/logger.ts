@@ -1,4 +1,5 @@
-import { env } from '../env.js';
+import { env } from "@monteiro/env";
+
 
 export const loggerOptions = {
     level: env.LOG_LEVEL,

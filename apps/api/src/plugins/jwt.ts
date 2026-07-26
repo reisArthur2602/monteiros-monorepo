@@ -1,4 +1,4 @@
-import { env } from '@/env.js';
+import { env } from '@monteiro/env';
 import jwt from '@fastify/jwt';
 import { UserRole } from '@monteiro/db';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';

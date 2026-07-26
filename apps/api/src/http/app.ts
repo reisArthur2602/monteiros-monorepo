@@ -16,6 +16,7 @@ import { registerCors } from '@/plugins/cors';
 import { registerDocs } from '@/plugins/docs';
 import { registerErrorHandler } from '@/plugins/error-handler';
 import { registerJwt } from '@/plugins/jwt';
+import { registerPrisma } from '@/plugins/prisma';
 import { registerRateLimit } from '@/plugins/rate-limit';
 import Fastify from 'fastify';
 import {
@@ -36,8 +37,7 @@ export const buildApp = async () => {
     await registerJwt(app);
     await registerAuthorize(app);
     await registerDocs(app);
-
-    app.get('/health', async () => ({ ok: true }));
+    await registerPrisma(app);
 
     await app.register(authenticateUser);
     await app.register(getProfile);
@@ -53,6 +53,8 @@ export const buildApp = async () => {
     await app.register(getIntakeForm);
     await app.register(updateIntakeForm);
     await app.register(deleteIntakeForm);
+
+    app.get('/health', async () => ({ ok: true }));
 
     return app;
 };

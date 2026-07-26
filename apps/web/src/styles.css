@@ -5,19 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 /* =========================================================
-   MONTEIRO — DESIGN SYSTEM (Legalis "Registro" 2.1)
-   Fonte de verdade: apps/web/reference/design-system/
+   MONTEIRO — DESIGN SYSTEM (Registro 2.2)
+   Fontes carregadas via <link> em src/pages/__root.tsx
+   (Newsreader, Spline Sans, IBM Plex Mono) — não duplicar
+   o carregamento aqui.
    ========================================================= */
 
 :root {
     /* ---------------------------------------------------
        1. PALETA PRIMITIVA — Registro
        Não usar diretamente em componentes; usar os tokens
-       semânticos abaixo (bg-*, text-*, border-*, status-*).
-       Primitivos não variam entre temas claro/escuro.
+       semânticos abaixo. Primitivos não variam por tema.
        --------------------------------------------------- */
-
-    /* Ink / tinta */
     --color-ink-950: #101713;
     --color-ink-900: #18221f;
     --color-ink-800: #21302a;
@@ -30,7 +29,6 @@
     --color-ink-100: #e4eae7;
     --color-ink-50: #f3f6f4;
 
-    /* Registry / registro */
     --color-registry-700: #304e61;
     --color-registry-600: #3e6177;
     --color-registry-500: #527a91;
@@ -38,7 +36,6 @@
     --color-registry-100: #dce7ec;
     --color-registry-50: #f1f6f8;
 
-    /* Seal / selo */
     --color-seal-700: #7d342c;
     --color-seal-600: #934135;
     --color-seal-500: #a9503e;
@@ -46,7 +43,6 @@
     --color-seal-100: #f1d9d3;
     --color-seal-50: #fbf2f0;
 
-    /* Brass / latão — uso restrito */
     --color-brass-700: #73551f;
     --color-brass-600: #8c692b;
     --color-brass-500: #a7813b;
@@ -54,35 +50,30 @@
     --color-brass-100: #efe4cc;
     --color-brass-50: #faf6ed;
 
-    /* Sage / sucesso */
     --color-sage-700: #2f664b;
     --color-sage-600: #3d795a;
     --color-sage-500: #4e8d6b;
     --color-sage-100: #dcece3;
     --color-sage-50: #f0f7f3;
 
-    /* Amber / alerta */
     --color-amber-700: #875919;
     --color-amber-600: #a16a20;
     --color-amber-500: #bd7e2b;
     --color-amber-100: #f4e3c7;
     --color-amber-50: #fcf6ea;
 
-    /* Crimson / perigo */
     --color-crimson-700: #7d303a;
     --color-crimson-600: #963b46;
     --color-crimson-500: #ad4a55;
     --color-crimson-100: #f2dadd;
     --color-crimson-50: #fcf2f3;
 
-    /* Plum / conteúdo especial */
     --color-plum-700: #5e4968;
     --color-plum-600: #72577d;
     --color-plum-500: #896b94;
     --color-plum-100: #e9e0ec;
     --color-plum-50: #f7f3f8;
 
-    /* Stone / neutros */
     --color-stone-950: #141916;
     --color-stone-900: #1c231f;
     --color-stone-800: #2b332f;
@@ -102,18 +93,14 @@
     --bg-surface: #fbfcfa;
     --bg-surface-subtle: #e9eeea;
     --bg-surface-elevated: #ffffff;
-    --bg-inverse: var(--color-ink-950);
     --bg-brand: #233b32;
     --bg-brand-hover: #2d4a40;
     --bg-brand-active: #192d26;
     --bg-accent: var(--color-seal-500);
 
-    /* ---------------------------------------------------
-       3. TEXTO SEMÂNTICO (tema claro)
-       --------------------------------------------------- */
-    --text-primary: var(--color-stone-900);
-    --text-secondary: var(--color-stone-600);
-    --text-tertiary: var(--color-stone-500);
+    --text-primary: #1c231f;
+    --text-secondary: #545e58;
+    --text-tertiary: #6d7771;
     --text-disabled: var(--color-stone-400);
     --text-inverse: #ffffff;
     --text-brand: var(--color-ink-700);
@@ -122,23 +109,12 @@
     --text-success: var(--color-sage-700);
     --text-warning: var(--color-amber-700);
 
-    /* ---------------------------------------------------
-       4. BORDAS (tema claro)
-       --------------------------------------------------- */
-    --border-subtle: var(--color-stone-200);
-    --border-default: var(--color-stone-300);
+    --border-subtle: #dde2df;
+    --border-default: #bec5c1;
     --border-strong: var(--color-stone-400);
-    --border-focus: var(--color-registry-500);
+    --border-focus: #527a91;
     --border-danger: var(--color-crimson-500);
 
-    /* ---------------------------------------------------
-       5. ESTADOS (tema claro)
-       Cada estado expõe background, border e foreground.
-       "special" cobre conteúdo gerado/plum — completado a
-       partir do primitivo plum, seguindo o mesmo padrão dos
-       demais estados (não definido explicitamente no CSS de
-       origem; ver relatório de divergências).
-       --------------------------------------------------- */
     --status-info-bg: var(--color-registry-50);
     --status-info-border: var(--color-registry-100);
     --status-info-text: var(--color-registry-700);
@@ -154,25 +130,36 @@
     --status-neutral-bg: var(--color-stone-100);
     --status-neutral-border: var(--color-stone-200);
     --status-neutral-text: var(--color-stone-700);
+    /* "special" (plum) não é definido explicitamente como tríade
+       semântica na fonte de origem; completado seguindo o mesmo
+       padrão dos demais estados. */
     --status-special-bg: var(--color-plum-50);
     --status-special-border: var(--color-plum-100);
     --status-special-text: var(--color-plum-700);
 
     /* ---------------------------------------------------
-       6. NAVEGAÇÃO / SHELL (tema fixo — sempre "tinta")
-       O sidebar permanece escuro nos dois temas do app.
+       3. NAVEGAÇÃO / SHELL (tema fixo — sempre "tinta")
        --------------------------------------------------- */
     --sidebar: var(--color-ink-950);
-    --sidebar-foreground: var(--color-ink-100);
+    --sidebar-foreground: var(--color-ink-200);
     --sidebar-primary: var(--color-seal-500);
     --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: rgba(255, 255, 255, 0.055);
+    --sidebar-accent: rgba(255, 255, 255, 0.05);
     --sidebar-accent-foreground: #ffffff;
     --sidebar-border: rgba(255, 255, 255, 0.07);
     --sidebar-ring: var(--color-registry-400);
 
     /* ---------------------------------------------------
-       8. CONTROLES E RITMO DE COMPONENTE
+       4. MOVIMENTO
+       --------------------------------------------------- */
+    --duration-fast: 110ms;
+    --duration-normal: 180ms;
+    --duration-slow: 260ms;
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* ---------------------------------------------------
+       5. CONTROLES E RITMO DE COMPONENTE
        --------------------------------------------------- */
     --control-sm: 2.125rem;
     --control-md: 2.625rem;
@@ -190,13 +177,14 @@
     --switch-thumb: 1rem;
 
     /* ---------------------------------------------------
-       9. LAYOUT
+       6. LAYOUT
        --------------------------------------------------- */
-    --sidebar-width: 17rem;
-    --content-max: 90rem;
+    --sidebar-width: 17.5rem;
+    --topbar-height: 4rem;
+    --content-max: 92rem;
 
     /* ---------------------------------------------------
-       10. CAMADAS
+       7. CAMADAS
        --------------------------------------------------- */
     --z-dropdown: 1000;
     --z-sticky: 1100;
@@ -206,9 +194,7 @@
     --z-tooltip: 1500;
 
     /* =====================================================
-       PONTE COM O TEMA SHADCN (base-vega)
-       Reaproveita os nomes estruturais já usados pelos
-       componentes gerados (button, input, card, badge…).
+       PONTE COM O TEMA SHADCN
        ===================================================== */
     --background: var(--bg-canvas);
     --foreground: var(--text-primary);
@@ -226,19 +212,20 @@
      * shadcn usa "accent" como superfície neutra de hover/seleção em menus,
      * dropdowns, calendário etc. — um conceito estrutural diferente do
      * "accent" do Design System (vermelho-selo institucional, de uso
-     * restrito e assinatura visual). Mapear accent estrutural para o
-     * vermelho-selo pintaria todo hover de menu de vermelho, violando a
-     * regra de contenção do próprio Design System. Por isso o accent
-     * estrutural usa um tom neutro (surface-subtle) e o vermelho-selo
-     * fica disponível como --bg-accent / bg-brand-accent para uso pontual
-     * e intencional (marcador de autos, kicker).
+     * restrito e assinatura visual). Por isso o accent estrutural usa um
+     * tom neutro (surface-subtle); o vermelho-selo fica disponível como
+     * --bg-accent / bg-brand-accent para uso pontual e intencional.
      */
     --accent: var(--bg-surface-subtle);
     --accent-foreground: var(--text-primary);
     --destructive: var(--color-crimson-600);
+    --destructive-foreground: #ffffff;
     --border: var(--border-default);
     --input: var(--border-default);
     --ring: var(--border-focus);
+
+    --radius: 0.5rem;
+    --tracking-normal: 0em;
 }
 
 .dark {
@@ -246,7 +233,6 @@
     --bg-surface: #171f1b;
     --bg-surface-subtle: #202a25;
     --bg-surface-elevated: #26312b;
-    --bg-inverse: #f5f7f5;
     --bg-brand: #426b5b;
     --bg-brand-hover: #4f7c6b;
     --bg-brand-active: #355b4d;
@@ -284,9 +270,6 @@
     --status-neutral-bg: #222b26;
     --status-neutral-border: #354039;
     --status-neutral-text: #d2d9d5;
-    /* Sem definição explícita na fonte de origem para o tema escuro;
-       derivado do primitivo plum seguindo o mesmo padrão dos demais
-       status. Ver relatório de divergências. */
     --status-special-bg: #2a2430;
     --status-special-border: #453a4d;
     --status-special-text: #d9cadf;
@@ -308,6 +291,7 @@
     --accent: var(--bg-surface-subtle);
     --accent-foreground: var(--text-primary);
     --destructive: var(--color-crimson-500);
+    --destructive-foreground: #ffffff;
     --border: var(--border-default);
     --input: var(--border-default);
     --ring: var(--border-focus);
@@ -330,25 +314,24 @@
     --color-accent: var(--accent);
     --color-accent-foreground: var(--accent-foreground);
     --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
     --color-border: var(--border);
     --color-input: var(--input);
     --color-ring: var(--ring);
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
 
-    /* Tokens semânticos Monteiro expostos como utilitários Tailwind
-       (bg-*, text-*, border-*) */
+    /* Tokens semânticos Monteiro expostos como utilitários Tailwind */
     --color-canvas: var(--bg-canvas);
     --color-surface: var(--bg-surface);
     --color-surface-subtle: var(--bg-surface-subtle);
     --color-surface-elevated: var(--bg-surface-elevated);
-    --color-inverse: var(--bg-inverse);
     --color-brand: var(--bg-brand);
     --color-brand-hover: var(--bg-brand-hover);
     --color-brand-active: var(--bg-brand-active);
@@ -374,9 +357,7 @@
     /*
      * Tríades de estado (badge, alert): status-{estado}-{bg|border|text}.
      * Nomeadas separadamente dos tokens de texto inline acima
-     * (success-text/warning-text/danger-text) para não colidir — um é a
-     * cor de ênfase de texto solto, o outro é a cor de texto sobre um
-     * fundo de estado (badge/alert).
+     * (success-text/warning-text/danger-text) para não colidir.
      */
     --color-status-info-bg: var(--status-info-bg);
     --color-status-info-border: var(--status-info-border);
@@ -397,12 +378,13 @@
     --color-status-special-border: var(--status-special-border);
     --color-status-special-text: var(--status-special-text);
 
-    /* Tipografia — famílias */
-    --font-display: 'Newsreader', Georgia, serif;
-    --font-legal: 'Newsreader', Georgia, serif;
+    /* Tipografia — famílias (padrão shadcn: sans/serif/mono) */
     --font-sans: 'Spline Sans', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
     --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
-    --font-heading: var(--font-display);
+    /* Aliases usados por componentes já existentes (CardTitle etc.) */
+    --font-display: var(--font-serif);
+    --font-heading: var(--font-serif);
 
     /* Escala tipográfica do Design System sobrepõe a escala padrão
        do Tailwind (text-xs … text-5xl) e adiciona 2xs/md. */
@@ -423,16 +405,21 @@
     --leading-normal: 1.52;
     --leading-relaxed: 1.72;
 
-    /* Raios — sobrepõe a escala calc()-derivada do preset padrão */
-    --radius-xs: 0.1875rem;
-    --radius-sm: 0.25rem;
-    --radius-md: 0.375rem;
-    --radius-lg: 0.5rem;
-    --radius-xl: 0.625rem;
-    --radius-2xl: 0.875rem;
+    /* Raios — um único --radius (âncora "lg") com offsets fixos que
+       reproduzem exatamente a escala não linear do Design System
+       (3 / 4 / 6 / 8 / 10 / 14 px), mantendo o padrão shadcn de
+       derivar a escala a partir de uma variável base. */
+    --radius-xs: calc(var(--radius) - 5px);
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 2px);
+    --radius-2xl: calc(var(--radius) + 6px);
     --radius-full: 9999px;
 
-    /* Sombras — sobrepõe a escala padrão do Tailwind */
+    /* Sombras — valores literais da fonte de origem (várias usam
+       múltiplas camadas de box-shadow, incompatíveis com o sistema
+       composable --shadow-x/y/blur/spread/color do template padrão). */
     --shadow-xs: 0 1px 1px rgba(16, 23, 19, 0.04);
     --shadow-sm: 0 1px 2px rgba(16, 23, 19, 0.06), 0 4px 12px rgba(16, 23, 19, 0.03);
     --shadow-md: 0 8px 24px rgba(16, 23, 19, 0.08);
@@ -452,7 +439,7 @@
    UTILITÁRIOS TIPOGRÁFICOS SEMÂNTICOS
    ========================================================= */
 @utility font-legal {
-    font-family: var(--font-legal);
+    font-family: var(--font-serif);
 }
 
 @utility overline {
@@ -465,7 +452,7 @@
 }
 
 @utility legal-copy {
-    font-family: var(--font-legal);
+    font-family: var(--font-serif);
     font-size: var(--text-lg);
     line-height: var(--leading-relaxed);
     letter-spacing: 0;
@@ -497,13 +484,8 @@
     letter-spacing: 0.02em;
 }
 
-/* =========================================================
-   MARCADOR DE AUTOS
-   Régua vertical curta em vermelho-selo. Uso restrito:
-   título de página, item ativo de navegação, seção
-   principal de documentação. Não usar como decoração em
-   todos os cards.
-   ========================================================= */
+/* Régua vertical curta em vermelho-selo. Uso restrito: título de
+   página, item ativo de navegação, seção principal de documentação. */
 @utility docket-marker {
     position: relative;
 
@@ -515,7 +497,7 @@
         bottom: 0.15em;
         width: 3px;
         border-radius: var(--radius-full);
-        background: var(--color-seal-400);
+        background: var(--color-seal-500);
     }
 }
 

@@ -14,7 +14,6 @@ import { Route as AppIndexRouteImport } from './pages/_app/index'
 import { Route as AuthIndexRouteImport } from './pages/auth/index'
 import { Route as AppClientsIndexRouteImport } from './pages/_app/clients/index'
 import { Route as AppModelsIndexRouteImport } from './pages/_app/models/index'
-import { Route as AppModelsNewIndexRouteImport } from './pages/_app/models/new/index'
 
 const AppLayoutRoute = AppLayoutRouteImport.update({
   id: '/_app',
@@ -40,25 +39,18 @@ const AppModelsIndexRoute = AppModelsIndexRouteImport.update({
   path: '/models/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-const AppModelsNewIndexRoute = AppModelsNewIndexRouteImport.update({
-  id: '/models/new/',
-  path: '/models/new/',
-  getParentRoute: () => AppLayoutRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/auth/': typeof AuthIndexRoute
   '/clients/': typeof AppClientsIndexRoute
   '/models/': typeof AppModelsIndexRoute
-  '/models/new/': typeof AppModelsNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/auth': typeof AuthIndexRoute
   '/clients': typeof AppClientsIndexRoute
   '/models': typeof AppModelsIndexRoute
-  '/models/new': typeof AppModelsNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +59,12 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/_app/clients/': typeof AppClientsIndexRoute
   '/_app/models/': typeof AppModelsIndexRoute
-  '/_app/models/new/': typeof AppModelsNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/' | '/clients/' | '/models/' | '/models/new/'
+  fullPaths: '/' | '/auth/' | '/clients/' | '/models/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/clients' | '/models' | '/models/new'
+  to: '/' | '/auth' | '/clients' | '/models'
   id:
     | '__root__'
     | '/_app'
@@ -81,7 +72,6 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/_app/clients/'
     | '/_app/models/'
-    | '/_app/models/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -126,13 +116,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppModelsIndexRouteImport
       parentRoute: typeof AppLayoutRoute
     }
-    '/_app/models/new/': {
-      id: '/_app/models/new/'
-      path: '/models/new'
-      fullPath: '/models/new/'
-      preLoaderRoute: typeof AppModelsNewIndexRouteImport
-      parentRoute: typeof AppLayoutRoute
-    }
   }
 }
 
@@ -140,14 +123,12 @@ interface AppLayoutRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppClientsIndexRoute: typeof AppClientsIndexRoute
   AppModelsIndexRoute: typeof AppModelsIndexRoute
-  AppModelsNewIndexRoute: typeof AppModelsNewIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppClientsIndexRoute: AppClientsIndexRoute,
   AppModelsIndexRoute: AppModelsIndexRoute,
-  AppModelsNewIndexRoute: AppModelsNewIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(

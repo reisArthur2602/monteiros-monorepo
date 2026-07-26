@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './pages/__root'
 import { Route as AppLayoutRouteImport } from './pages/_app/layout'
 import { Route as AppIndexRouteImport } from './pages/_app/index'
 import { Route as AuthIndexRouteImport } from './pages/auth/index'
+import { Route as AppClientsIndexRouteImport } from './pages/_app/clients/index'
 import { Route as AppModelsIndexRouteImport } from './pages/_app/models/index'
 import { Route as AppModelsNewIndexRouteImport } from './pages/_app/models/new/index'
 
@@ -29,6 +30,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppClientsIndexRoute = AppClientsIndexRouteImport.update({
+  id: '/clients/',
+  path: '/clients/',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
 const AppModelsIndexRoute = AppModelsIndexRouteImport.update({
   id: '/models/',
   path: '/models/',
@@ -43,12 +49,14 @@ const AppModelsNewIndexRoute = AppModelsNewIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/clients/': typeof AppClientsIndexRoute
   '/models/': typeof AppModelsIndexRoute
   '/models/new/': typeof AppModelsNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/clients': typeof AppClientsIndexRoute
   '/models': typeof AppModelsIndexRoute
   '/models/new': typeof AppModelsNewIndexRoute
 }
@@ -57,19 +65,21 @@ export interface FileRoutesById {
   '/_app': typeof AppLayoutRouteWithChildren
   '/_app/': typeof AppIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/_app/clients/': typeof AppClientsIndexRoute
   '/_app/models/': typeof AppModelsIndexRoute
   '/_app/models/new/': typeof AppModelsNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/' | '/models/' | '/models/new/'
+  fullPaths: '/' | '/auth/' | '/clients/' | '/models/' | '/models/new/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/models' | '/models/new'
+  to: '/' | '/auth' | '/clients' | '/models' | '/models/new'
   id:
     | '__root__'
     | '/_app'
     | '/_app/'
     | '/auth/'
+    | '/_app/clients/'
     | '/_app/models/'
     | '/_app/models/new/'
   fileRoutesById: FileRoutesById
@@ -102,6 +112,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/clients/': {
+      id: '/_app/clients/'
+      path: '/clients'
+      fullPath: '/clients/'
+      preLoaderRoute: typeof AppClientsIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
     '/_app/models/': {
       id: '/_app/models/'
       path: '/models'
@@ -121,12 +138,14 @@ declare module '@tanstack/react-router' {
 
 interface AppLayoutRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
+  AppClientsIndexRoute: typeof AppClientsIndexRoute
   AppModelsIndexRoute: typeof AppModelsIndexRoute
   AppModelsNewIndexRoute: typeof AppModelsNewIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppIndexRoute: AppIndexRoute,
+  AppClientsIndexRoute: AppClientsIndexRoute,
   AppModelsIndexRoute: AppModelsIndexRoute,
   AppModelsNewIndexRoute: AppModelsNewIndexRoute,
 }
